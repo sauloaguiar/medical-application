@@ -1,0 +1,4 @@
+postgres:
+    image: postgres
+    ports:
+    - 8000:5432
