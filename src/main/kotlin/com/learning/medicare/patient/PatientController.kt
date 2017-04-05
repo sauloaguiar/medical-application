@@ -1,14 +1,15 @@
 package com.learning.medicare.patient
 
 import com.learning.medicare.prescription.PrescriptionRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 /**
  * Created by sauloaguiar on 3/21/17.
  */
 @RestController
-@RequestMapping("/patientRepository")
-class PatientController(val patientRepository: PatientRepository, val prescriptionRepository: PrescriptionRepository) {
+@RequestMapping("/patient")
+class PatientController(val patientRepository: PatientRepository) {
 
     @GetMapping("/")
     fun findAll() = patientRepository.findAll()
