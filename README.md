@@ -1,5 +1,7 @@
 ## Care Management Application
 
+[![CircleCI](https://circleci.com/gh/sauloaguiar/medical-application/tree/master.svg?style=svg)](https://circleci.com/gh/sauloaguiar/medical-application/tree/master)
+
 ### Motivation
 
 This is a learning project that involves application modeling, programming and development best practices.
