@@ -1,8 +1,5 @@
 package com.learning.medicare.prescription
 
-import com.learning.medicare.patient.Patient
-import com.learning.medicare.patient.PatientController
-import com.learning.medicare.patient.PatientRepository
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InjectMocks

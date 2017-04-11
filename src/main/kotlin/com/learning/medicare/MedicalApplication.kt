@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean
 import java.util.*
 
 @SpringBootApplication
-open class DemoApplication {
+open class MedicalApplication {
 
     @Bean
     open fun init(repository: PatientRepository) = CommandLineRunner {
@@ -20,7 +20,7 @@ open class DemoApplication {
 }
 
 fun main(args: Array<String>) {
-    SpringApplication.run(DemoApplication::class.java, *args)
+    SpringApplication.run(MedicalApplication::class.java, *args)
 
 }
 
