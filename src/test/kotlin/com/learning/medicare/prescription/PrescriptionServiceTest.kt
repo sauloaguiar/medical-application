@@ -1,7 +1,7 @@
 package com.learning.medicare.prescription
 
-import com.learning.medicare.patient.PatientRepository
-import com.learning.medicare.patient.PatientService
+import com.learning.medicare.user.UserRepository
+import com.learning.medicare.user.UserService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.learning.medicare.patient
+package com.learning.medicare.user
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -15,10 +15,10 @@ import java.util.*
 class UserServiceTest {
 
     @InjectMocks
-    lateinit var service: PatientService
+    lateinit var service: UserService
 
     @Mock
-    lateinit var repository: PatientRepository
+    lateinit var repository: UserRepository
 
     @Before
     fun setup() {
@@ -27,7 +27,7 @@ class UserServiceTest {
 
     @Test
     fun shouldLoadPatientById() {
-        var user = Patient("Saulo","Aguiar", Date(1989, 10, 26))
+        var user = User("Saulo","Aguiar", Date(1989, 10, 26))
         Mockito.`when`(repository.findOne(1)).thenReturn(user)
 
         assertThat(service.findOne(1)).isEqualTo(user)
@@ -37,8 +37,8 @@ class UserServiceTest {
 
     @Test
     fun shouldLoadAllPatients() {
-        var user1 = Patient("Saulo","Aguiar", Date(1989, 10, 26))
-        var user2 = Patient("Jonathan","Freeman", Date(1989, 10, 26))
+        var user1 = User("Saulo","Aguiar", Date(1989, 10, 26))
+        var user2 = User("Jonathan","Freeman", Date(1989, 10, 26))
 
         Mockito.`when`(repository.findAll()).thenReturn(listOf(user1, user2))
 
@@ -49,7 +49,7 @@ class UserServiceTest {
 
     @Test
     fun shouldSavePatient() {
-        var user1 = Patient("Saulo","Aguiar", Date(1989, 10, 26))
+        var user1 = User("Saulo","Aguiar", Date(1989, 10, 26))
         service.save(user1)
         Mockito.verify(repository).save(user1)
     }
