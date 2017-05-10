@@ -17,5 +17,10 @@ class User(
         @JsonManagedReference
         @OneToMany(mappedBy = "user", cascade = arrayOf(CascadeType.ALL))
         val prescriptions: List<Prescription> = emptyList(),
+        @ManyToMany(cascade = arrayOf(CascadeType.ALL))
+        @JoinTable(name = "users_roles",
+                joinColumns = arrayOf(JoinColumn(name = "user_id", referencedColumnName = "id")),
+                inverseJoinColumns = arrayOf(JoinColumn(name = "role_id", referencedColumnName = "id")))
+        val roles: Set<Role> = emptySet(),
         @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0
         )
