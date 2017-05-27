@@ -1,6 +1,8 @@
 package com.learning.medicare.user
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.learning.medicare.prescription.Prescription
 import java.util.*
 import javax.persistence.*
@@ -10,6 +12,7 @@ import javax.persistence.*
  */
 
 @Entity @Table(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
 class User(
         val firstName: String = "",
         val lastName: String = "",
