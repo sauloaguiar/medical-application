@@ -1,10 +1,12 @@
 package com.learning.medicare.user
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * Created by sauloaguiar on 5/16/17.
  */
 @Repository
-interface RoleRepository : CrudRepository<Role, Long>
+@Transactional
+open interface RoleRepository : JpaRepository<Role, Long>

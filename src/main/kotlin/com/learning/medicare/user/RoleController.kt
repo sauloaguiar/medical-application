@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.*
  */
 @RestController
 @RequestMapping("/role")
-class RoleController(val roleRepository: RoleRepository) {
+class RoleController(val roleService: RoleService) {
 
     @GetMapping("/")
-    fun findAll() = roleRepository.findAll()
+    fun findAll() = roleService.findAll()
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long) = roleRepository.findOne(id)
+    fun findById(@PathVariable id: Long) = roleService.findById(id)
 
     @PostMapping("/")
-    fun saveRole(@RequestBody role: Role) = roleRepository.save(role)
+    fun saveRole(@RequestBody role: Role) = roleService.save(role)
 }
 
 
