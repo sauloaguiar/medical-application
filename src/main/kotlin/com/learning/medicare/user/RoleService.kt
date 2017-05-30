@@ -10,9 +10,15 @@ import javax.transaction.Transactional
  * Created by sauloaguiar on 5/28/17.
  */
 @Service
-open class RoleService (val repository: RoleRepository){
+open class RoleServiceImpl (val repository: RoleRepository) : RoleService {
 
-    fun findAll() = repository.findAll()
-    fun findById(id: Long) = repository.findOne(id)
-    fun save(role: Role) = repository.save(role)
+    override fun findAll() = repository.findAll()
+    override fun findById(id: Long) = repository.findOne(id)
+    override fun save(role: Role) = repository.save(role)
+}
+
+interface RoleService {
+    fun findAll(): List<Role>
+    fun findById(id: Long): Role
+    fun save(role: Role): Role
 }

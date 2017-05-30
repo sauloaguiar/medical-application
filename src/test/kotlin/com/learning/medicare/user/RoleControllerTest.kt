@@ -26,19 +26,16 @@ class RoleControllerTest {
     @MockBean
     lateinit var service: RoleService
 
-    @MockBean
-    lateinit var serviceRepository: RoleRepository
-
     @Test
     fun shouldReturnRole() {
         val role = Role("admin")
         print(service)
         given(service.findAll()).willReturn(listOf(role))
 
-        mvc.perform(MockMvcRequestBuilders.get("/role"))
+        mvc.perform(MockMvcRequestBuilders.get("/role/"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Is.`is`(role.name)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Is.`is`(role.name)))
 
     }
 }
