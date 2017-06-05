@@ -1,7 +1,5 @@
 package com.learning.medicare.user
 
-import com.learning.medicare.prescription.PrescriptionRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -9,7 +7,7 @@ import org.springframework.web.bind.annotation.*
  */
 @RestController
 @RequestMapping("/role")
-class RoleController(val roleService: RoleService) {
+class RoleController(val roleService: RoleServiceContract) {
 
     @GetMapping("/")
     fun findAll() = roleService.findAll()

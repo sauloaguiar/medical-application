@@ -1,7 +1,5 @@
 package com.learning.medicare.user
 
-import com.learning.medicare.prescription.PrescriptionRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -9,19 +7,19 @@ import org.springframework.web.bind.annotation.*
  */
 @RestController
 @RequestMapping("/user")
-class UserController(val userRepository: UserRepository) {
+class UserController(val userService: UserServiceContract) {
 
     @GetMapping("/")
-    fun findAll() = userRepository.findAll()
+    fun findAll() = userService.findAll()
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long) = userRepository.findOne(id)
+    fun findById(@PathVariable id: Long) = userService.findOne(id)
 
     @PostMapping("/")
-    fun savePatient(@RequestBody user: User) = userRepository.save(user)
+    fun savePatient(@RequestBody user: User) = userService.save(user)
 
     @GetMapping("/{id}/prescriptions")
-    fun getAllPrescriptions(@PathVariable id: Long) = userRepository.findOne(id).prescriptions
+    fun getAllPrescriptions(@PathVariable id: Long) = userService.findOne(id).prescriptions
 
 }
 

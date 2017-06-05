@@ -24,7 +24,7 @@ class RoleControllerTest {
     lateinit var mvc: MockMvc
 
     @MockBean
-    lateinit var service: RoleService
+    lateinit var service: RoleServiceContract
 
     @Test
     fun shouldReturnRole() {

@@ -1,5 +1,7 @@
 package com.learning.medicare.prescription
 
+import com.learning.medicare.user.UserController
+import com.learning.medicare.user.UserServiceContract
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -13,30 +15,29 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.hamcrest.core.Is.`is`
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.junit4.SpringRunner
 
 /**
  * Created by sauloaguiar on 4/4/17.
  */
+@RunWith(SpringRunner::class)
+@WebMvcTest(PrescriptionController::class)
 class PrescriptionControllerTest {
 
+    @Autowired
     lateinit var mockMvc: MockMvc
 
-    @InjectMocks
-    lateinit var controller: PrescriptionController
-
-    @Mock
-    lateinit var repository: PrescriptionRepository
-
-    @Before
-    fun setup() {
-        MockitoAnnotations.initMocks(this)
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).setMessageConverters(MappingJackson2HttpMessageConverter()).build()
-    }
+    @MockBean
+    lateinit var service: PrescriptionServiceContract
 
     @Test
     fun shouldLoadPrescriptionById() {
         var prescription = Prescription("Should take beer twice a week")
-        Mockito.`when`(repository.findOne(1)).thenReturn(prescription)
+        Mockito.`when`(service.findOne(1)).thenReturn(prescription)
         mockMvc.perform(MockMvcRequestBuilders.get("/prescription/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
