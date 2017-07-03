@@ -14,6 +14,5 @@ open class MedicalApplication
 
 fun main(args: Array<String>) {
     SpringApplication.run(MedicalApplication::class.java, *args)
-
 }
 

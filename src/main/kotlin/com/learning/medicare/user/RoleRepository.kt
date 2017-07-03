@@ -9,4 +9,4 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Repository
 @Transactional
-open interface RoleRepository : CrudRepository<Role, Long>
+interface RoleRepository : CrudRepository<Role, Long>

@@ -1,4 +1,14 @@
-postgres:
+version: '3'
+services:
+  db:
+    container_name: database
     image: postgres
     ports:
-    - 8000:5432
+      - 5432:5432
+  web:
+    container_name: application
+    build: .
+    ports:
+      - 8080:8080
+    links:
+      - db:postgres
