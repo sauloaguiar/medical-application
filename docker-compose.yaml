@@ -1,6 +1,6 @@
 version: '3'
 services:
-  db:
+  database:
     container_name: database
     image: postgres
     ports:
@@ -8,7 +8,10 @@ services:
   web:
     container_name: application
     build: .
+    volumes:
+      - ~/projects/demo:/usr/local/application-data
+      - ~/.gradle/:/root/.gradle/
     ports:
       - 8080:8080
     links:
-      - db:postgres
+      - database
