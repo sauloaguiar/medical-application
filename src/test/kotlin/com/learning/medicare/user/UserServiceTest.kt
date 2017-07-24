@@ -50,6 +50,7 @@ class UserServiceTest {
     @Test
     fun shouldSavePatient() {
         var user1 = User("Saulo","Aguiar", Date(1989, 10, 26))
+        Mockito.`when`(repository.save(user1)).thenReturn(user1)
         service.save(user1)
         Mockito.verify(repository).save(user1)
     }

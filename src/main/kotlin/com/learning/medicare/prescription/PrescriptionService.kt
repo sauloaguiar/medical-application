@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service
  */
 @Service
 class PrescriptionService (val repository: PrescriptionRepository) : PrescriptionServiceContract {
-    override fun findOne(id: Long) = repository.findOne(id)
-    override fun findAll() = repository.findAll()
-    override fun save(prescription: Prescription) = repository.save(prescription)
+    override fun findOne(id: Long): Prescription = repository.findOne(id)
+    override fun findAll(): Iterable<Prescription> = repository.findAll()
+    override fun save(prescription: Prescription): Prescription = repository.save(prescription)
 }
 
 interface PrescriptionServiceContract {

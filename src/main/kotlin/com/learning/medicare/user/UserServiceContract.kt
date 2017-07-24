@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service
  */
 @Service
 class UserService(val userRepository: UserRepository) : UserServiceContract {
-    override fun findAll() = userRepository.findAll()
-    override fun findOne(id: Long) = userRepository.findOne(id)
-    override fun save(user: User) = userRepository.save(user)
+    override fun findAll(): Iterable<User> = userRepository.findAll()
+    override fun findOne(id: Long): User = userRepository.findOne(id)
+    override fun save(user: User): User = userRepository.save(user)
 }
 
 interface UserServiceContract {

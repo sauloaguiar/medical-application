@@ -1,6 +1,7 @@
 package com.learning.medicare.prescription
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.learning.medicare.administration.Administration
 import com.learning.medicare.user.User
 import javax.persistence.*
 
@@ -15,4 +16,7 @@ class Prescription(
         @JsonBackReference
         @JoinColumn(name = "user_id", referencedColumnName = "id")
         val user: User? = null,
+
+        @OneToMany(mappedBy = "prescription")
+        val administration: List<Administration> = emptyList(),
         @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0)

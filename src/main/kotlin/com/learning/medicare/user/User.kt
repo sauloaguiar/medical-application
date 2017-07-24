@@ -3,6 +3,7 @@ package com.learning.medicare.user
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.learning.medicare.administration.Administration
 import com.learning.medicare.prescription.Prescription
 import java.util.*
 import javax.persistence.*
@@ -25,5 +26,11 @@ class User(
                 joinColumns = arrayOf(JoinColumn(name = "user_id", referencedColumnName = "id")),
                 inverseJoinColumns = arrayOf(JoinColumn(name = "role_id", referencedColumnName = "id")))
         val roles: Set<Role> = emptySet(),
+
+        @OneToMany(mappedBy = "patient")
+        val takenAdministration: List<Administration> = emptyList(),
+
+        @OneToMany(mappedBy = "caregiver")
+        val givenAdministration: List<Administration> = emptyList(),
         @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0
         )

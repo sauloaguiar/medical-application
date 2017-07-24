@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service
  */
 @Service
 open class RoleService(val repository: RoleRepository) : RoleServiceContract {
-    override fun findAll() = repository.findAll()
-    override fun findById(id: Long) = repository.findOne(id)
-    override fun save(role: Role) = repository.save(role)
+    override fun findAll(): Iterable<Role> = repository.findAll()
+    override fun findById(id: Long): Role = repository.findOne(id)
+    override fun save(role: Role): Role = repository.save(role)
 }
 
 interface RoleServiceContract {

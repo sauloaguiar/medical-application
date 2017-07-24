@@ -48,6 +48,7 @@ class PrescriptionServiceTest {
     @Test
     fun shouldSavePrescription() {
         var presc1 = Prescription("should eat soup once in a while")
+        Mockito.`when`(repository.save(presc1)).thenReturn(presc1)
         service.save(presc1)
         Mockito.verify(repository).save(presc1)
     }
