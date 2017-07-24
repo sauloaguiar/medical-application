@@ -1,13 +1,15 @@
 version: '3'
 services:
   database:
-    container_name: database
     image: postgres
+    volumes:
+      - ~/projects/demo/data:/var/lib/postgresql/data
     ports:
       - 5432:5432
   web:
-    container_name: application
     build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/postgres
     volumes:
       - ~/projects/demo:/usr/local/application-data
       - ~/.gradle/:/root/.gradle/
