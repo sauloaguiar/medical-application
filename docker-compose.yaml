@@ -10,9 +10,6 @@ services:
     build: .
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/postgres
-    volumes:
-      - ~/projects/demo:/usr/local/application-data
-      - ~/.gradle/:/root/.gradle/
     ports:
       - 8080:8080
     links:

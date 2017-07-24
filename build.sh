@@ -1,16 +1,18 @@
 #!/bin/bash
 
-setup() {
+buildJar() {
   echo ":: building application jar..."
-  cd /usr/local/application-data
   gradle bootRepackage
-  cp /usr/local/application-data/build/libs/demo-0.0.1-SNAPSHOT.jar /usr/local/bin/application.jar
 }
 
-run() {
-  echo ":: running..."
-  java -jar /usr/local/bin/application.jar
+buildContainer() {
+  docker build . -t sauloaguiar/medical:0.0.1
 }
 
-setup
-run
+startContainer() {
+  docker run -d -p 8080:8080 sauloaguiar/medical:0.0.1
+}
+
+buildJar
+buildContainer
+startContainer
