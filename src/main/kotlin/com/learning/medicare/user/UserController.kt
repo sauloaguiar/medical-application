@@ -16,7 +16,7 @@ class UserController(val userService: UserServiceContract) {
     fun findById(@PathVariable id: Long) = userService.findOne(id)
 
     @PostMapping("/")
-    fun savePatient(@RequestBody user: User) = userService.save(user)
+    fun saveUser(@RequestBody user: User) = userService.save(user)
 
     @GetMapping("/{id}/prescriptions")
     fun getAllPrescriptions(@PathVariable id: Long) = userService.findOne(id).prescriptions

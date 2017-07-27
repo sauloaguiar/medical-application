@@ -2,8 +2,8 @@
 # chose a container
 FROM openjdk:8-jre
 
-# mount volume to host application data
-VOLUME ["/usr/local/application-data"]
+# create folder to hold application data
+RUN mkdir /usr/local/application-data
 
 # copy jar file
 COPY build/libs/medicalApp-0.0.1.jar /usr/local/application-data/medicalApp.jar
