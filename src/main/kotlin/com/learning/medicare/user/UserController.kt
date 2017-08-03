@@ -1,6 +1,7 @@
 package com.learning.medicare.user
 
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 /**
  * Created by sauloaguiar on 3/21/17.
@@ -21,5 +22,8 @@ class UserController(val userService: UserServiceContract) {
     @GetMapping("/{id}/prescriptions")
     fun getAllPrescriptions(@PathVariable id: Long) = userService.findOne(id).prescriptions
 
+    @GetMapping("/{caregiverId}/patients")
+    fun getAllPatients(@PathVariable caregiverId: Long) = userService.getAllPatientsFor(caregiverId).toList()
+//        userService.findOne(caregiverId).getAllPatients()
 }
 

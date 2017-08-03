@@ -29,7 +29,6 @@ class RoleControllerTest {
     @Test
     fun shouldReturnRole() {
         val role = Role("admin")
-        print(service)
         given(service.findAll()).willReturn(listOf(role))
 
         mvc.perform(MockMvcRequestBuilders.get("/role/"))

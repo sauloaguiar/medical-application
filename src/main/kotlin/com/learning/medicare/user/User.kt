@@ -14,7 +14,7 @@ import javax.persistence.*
 
 @Entity @Table(name = "users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
-class User(
+data class User(
         val firstName: String = "",
         val lastName: String = "",
         val birthday: Date = Date(),
@@ -26,11 +26,4 @@ class User(
                 joinColumns = arrayOf(JoinColumn(name = "user_id", referencedColumnName = "id")),
                 inverseJoinColumns = arrayOf(JoinColumn(name = "role_id", referencedColumnName = "id")))
         val roles: Set<Role> = emptySet(),
-
-        @OneToMany(mappedBy = "patient")
-        val takenAdministration: List<Administration> = emptyList(),
-
-        @OneToMany(mappedBy = "caregiver")
-        val givenAdministration: List<Administration> = emptyList(),
-        @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0
-        )
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0)

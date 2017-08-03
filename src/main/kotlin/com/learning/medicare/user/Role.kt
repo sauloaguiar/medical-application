@@ -9,7 +9,7 @@ import javax.persistence.*
  */
 @Entity @Table(name = "roles")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
-class Role (val name: String = "",
+data class Role (val name: String = "",
             @ManyToMany(mappedBy = "roles", cascade = arrayOf(CascadeType.ALL))
             val users: Set<User> = emptySet(),
             @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) val id: Long = 0)
