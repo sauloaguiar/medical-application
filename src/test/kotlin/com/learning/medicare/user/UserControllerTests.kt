@@ -3,6 +3,7 @@ package com.learning.medicare.user
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.learning.medicare.prescription.Prescription
 import com.learning.medicare.prescription.PrescriptionServiceContract
+import com.learning.medicare.prescription.Timetable
 import org.hamcrest.Matchers.*
 import org.hamcrest.core.Is.`is`
 import org.junit.Test
@@ -26,7 +27,7 @@ class UserControllerTests {
     lateinit var mockMvc: MockMvc
 
     @MockBean
-    lateinit var service: UserServiceContract
+    lateinit var userService: UserServiceContract
 
     @MockBean
     lateinit var prescriptionService: PrescriptionServiceContract
@@ -34,7 +35,7 @@ class UserControllerTests {
     @Test
  	fun shouldLoadUserById() {
 		var user = User("Saulo","Aguiar", Date(1989, 10, 26))
-		Mockito.`when`(service.findOne(1)).thenReturn(user)
+		Mockito.`when`(userService.findOne(1)).thenReturn(user)
 		mockMvc.perform(get("/user/1"))
 				.andExpect(status().isOk)
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -50,7 +51,7 @@ class UserControllerTests {
         val patient3 = User("Wonder","Woman", Date(1987, 10, 26), id = 3)
 
         // when
-        Mockito.`when`(service.findAll()).thenReturn(listOf(patient1, patient2, patient3))
+        Mockito.`when`(userService.findAll()).thenReturn(listOf(patient1, patient2, patient3))
 
         // then
         mockMvc.perform(get("/user/"))
@@ -69,7 +70,7 @@ class UserControllerTests {
         val createdUser = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1L, roles = emptySet())
 
         // when
-        Mockito.`when`(service.save(testUser)).thenReturn(createdUser)
+        Mockito.`when`(userService.save(testUser)).thenReturn(createdUser)
 
         // then
         mockMvc.perform(post("/user/")
@@ -133,7 +134,7 @@ class UserControllerTests {
         val user = User("First", "Last", Date(1990, 10, 1), listOf(presc1, presc2), id = 1L)
 
         // when
-        Mockito.`when`(service.findOne(user.id)).thenReturn(user)
+        Mockito.`when`(userService.findOne(user.id)).thenReturn(user)
 
         // then
         mockMvc.perform(get("/user/${user.id}/prescriptions"))
@@ -152,7 +153,7 @@ class UserControllerTests {
         val patient3 = User("Wonder","Woman", Date(1987, 10, 26), id = 3)
         val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role("admin")), id = 4)
 
-        Mockito.`when`(service.getAllPatientsFor(caregiver.id)).thenReturn(listOf(patient1, patient2, patient3).asSequence())
+        Mockito.`when`(userService.getAllPatientsFor(caregiver.id)).thenReturn(listOf(patient1, patient2, patient3).asSequence())
 
         mockMvc.perform(get("/user/${caregiver.id}/patients"))
                 .andExpect(status().isOk)
@@ -162,40 +163,5 @@ class UserControllerTests {
                 .andExpect(jsonPath("$[1].firstName", equalTo(patient2.firstName)))
                 .andExpect(jsonPath("$[2].firstName", equalTo(patient3.firstName)))
     }
-
-    @Test
-    fun shouldAssociatePrescriptionToPatient() {
-        // given
-        val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
-        val presc1 = Prescription(
-                medicineName = "paracetamol",
-                medicineDose = 500,
-                medicineDoseUnit = "mg",
-                endDate = Date(2017, 10, 26).time,
-                startDate = Date(2017, 8, 26).time)
-
-        val presc2 = presc1.copy(user = patient1)
-//        val presc2 = Prescription(
-//                medicineName = "paracetamol",
-//                medicineDose = 500,
-//                medicineDoseUnit = "mg",
-//                endDate = Date(2017, 10, 26).time,
-//                startDate = Date(2017, 8, 26).time,
-//                user = patient1)
-        // when
-        Mockito.`when`(service.findOne(patient1.id)).thenReturn(patient1)
-        Mockito.`when`(prescriptionService.save(presc2)).thenReturn(presc2)
-
-        // then
-        mockMvc.perform(post("/user/${patient1.id}/prescription")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(ObjectMapper().writeValueAsBytes(presc1)))
-                .andExpect(status().isOk)
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.user.firstName", equalTo(patient1.firstName)))
-
-    }
-
-    // test when there's no user with that id
 
 }

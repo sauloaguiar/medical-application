@@ -22,7 +22,7 @@ data class Prescription(
 
         @ManyToOne(cascade = arrayOf(CascadeType.ALL))
         @JoinColumn(name = "timetable_id", referencedColumnName = "id")
-        @field:NotNull val timetable: Timetables? = null,
+        @field:NotNull val timetable: Timetable? = null,
 
         var assignedAt: Long = System.currentTimeMillis(),
         var startDate: Long = 0,

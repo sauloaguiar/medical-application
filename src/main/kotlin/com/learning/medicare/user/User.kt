@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull
 @Entity
 @Table(name = "users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
-class User(
+data class User(
         @field:NotBlank var firstName: String = "",
         @field:NotBlank var lastName: String = "",
         @field:NotNull var birthday: Date = Date(),

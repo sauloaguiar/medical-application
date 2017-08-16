@@ -1,9 +1,7 @@
 package com.learning.medicare.user
 
 import com.learning.medicare.prescription.Prescription
-import com.learning.medicare.prescription.PrescriptionService
 import com.learning.medicare.prescription.PrescriptionServiceContract
-import com.learning.medicare.prescription.Timetables
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*

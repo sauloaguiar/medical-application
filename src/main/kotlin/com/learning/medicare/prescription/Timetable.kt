@@ -7,7 +7,7 @@ import javax.persistence.*
 @Entity
 @Table
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
-data class Timetables(
+class Timetable(
         @field:NotBlank var frequency: String = "",
         @field:NotBlank var cron: String = "",
         @OneToMany(mappedBy = "timetable", cascade = arrayOf(CascadeType.ALL))
