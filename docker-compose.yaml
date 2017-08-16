@@ -1,4 +1,16 @@
-postgres:
+version: '3'
+services:
+  database:
     image: postgres
+    volumes:
+      - ~/projects/demo/data:/var/lib/postgresql/data
     ports:
-    - 8000:5432
+      - 5432:5432
+  web:
+    build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/postgres
+    ports:
+      - 8080:8080
+    links:
+      - database

@@ -1,6 +1,11 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+out/
+build/
+
+# Postgres data for container use
+data/
 
 ### STS ###
 .apt_generated

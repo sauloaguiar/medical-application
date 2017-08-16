@@ -1,10 +1,19 @@
 package com.learning.medicare.prescription
 
+import org.springframework.stereotype.Service
+
 /**
  * Created by sauloaguiar on 4/10/17.
  */
-class PrescriptionService (val repository: PrescriptionRepository){
-    fun findOne(id: Long) = repository.findOne(id)
-    fun findAll() = repository.findAll()
-    fun save(prescription: Prescription) = repository.save(prescription)
+@Service
+class PrescriptionService (val repository: PrescriptionRepository) : PrescriptionServiceContract {
+    override fun findOne(id: Long): Prescription = repository.findOne(id)
+    override fun findAll(): Iterable<Prescription> = repository.findAll()
+    override fun save(prescription: Prescription): Prescription = repository.save(prescription)
+}
+
+interface PrescriptionServiceContract {
+    fun findAll(): Iterable<Prescription>
+    fun findOne(id: Long): Prescription
+    fun save(prescription: Prescription): Prescription
 }

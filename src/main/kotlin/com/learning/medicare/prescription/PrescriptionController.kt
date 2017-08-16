@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/prescription")
-class PrescriptionController(val repository: PrescriptionRepository) {
+class PrescriptionController(val service: PrescriptionServiceContract) {
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long) = repository.findOne(id)
+    fun findById(@PathVariable id: Long) = service.findOne(id)
 }
