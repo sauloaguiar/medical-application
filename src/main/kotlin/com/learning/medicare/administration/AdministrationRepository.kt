@@ -7,4 +7,6 @@ import org.springframework.transaction.annotation.Transactional
 /**
  * Created by sauloaguiar on 7/13/17.
  */
-interface AdministrationRepository : CrudRepository<Administration, Long>
+interface AdministrationRepository : CrudRepository<Administration, Long> {
+//    fun findByTimestampGreaterThanEqualAndLessThanEqual(startInterval: Long, endInterval: Long)
+}

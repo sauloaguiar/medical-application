@@ -5,7 +5,7 @@ import javax.persistence.*
 @Entity
 @Table
 data class TakesCareOf(
-        val patientId: Long,
-        val caregiverId: Long,
-        val assignedAt: Long,
+        var patientId: Long = 0,
+        var caregiverId: Long = 0,
+        var assignedAt: Long = 0,
         @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0)

@@ -32,7 +32,7 @@ class AdministrationServiceTest {
 
     @Test
     fun shouldLoadAdministrationById() {
-        val example = Administration(timestamp = Timestamp(System.currentTimeMillis()))
+        val example = Administration(timestamp = System.currentTimeMillis(), caregiver_id = 0, patient_id = 0)
         Mockito.`when`(repository.findOne(1)).thenReturn(example)
 
         assertThat(service.findOne(1)).isEqualTo(example)
@@ -40,8 +40,8 @@ class AdministrationServiceTest {
 
     @Test
     fun shouldLoadAllAdministrations() {
-        val example1 = Administration(timestamp = Timestamp(System.currentTimeMillis()))
-        val example2 = Administration(timestamp = Timestamp(System.currentTimeMillis()))
+        val example1 = Administration(timestamp = System.currentTimeMillis(), caregiver_id = 0, patient_id = 0)
+        val example2 = Administration(timestamp = System.currentTimeMillis(), caregiver_id = 0, patient_id = 0)
 
         Mockito.`when`(repository.findAll()).thenReturn(listOf(example1, example2))
         assertThat(service.findAll()).hasSize(2)
@@ -50,10 +50,15 @@ class AdministrationServiceTest {
 
     @Test
     fun shouldSaveAdministration() {
-        val example = Administration(timestamp = Timestamp(System.currentTimeMillis()))
+        val example = Administration(timestamp = System.currentTimeMillis(), caregiver_id = 0, patient_id = 0)
         Mockito.`when`(repository.save(example)).thenReturn(example)
         service.save(example)
         Mockito.verify(repository).save(example)
+    }
+
+    @Test
+    fun shouldLoadAdministrationsWithinAnInterval() {
+
     }
 
     /*

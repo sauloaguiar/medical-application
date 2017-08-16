@@ -1,6 +1,8 @@
 package com.learning.medicare.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.learning.medicare.prescription.Prescription
+import com.learning.medicare.prescription.PrescriptionServiceContract
 import org.hamcrest.Matchers.*
 import org.hamcrest.core.Is.`is`
 import org.junit.Test
@@ -25,6 +27,9 @@ class UserControllerTests {
 
     @MockBean
     lateinit var service: UserServiceContract
+
+    @MockBean
+    lateinit var prescriptionService: PrescriptionServiceContract
 
     @Test
  	fun shouldLoadUserById() {
@@ -60,7 +65,7 @@ class UserControllerTests {
     @Test
     fun shouldCreateUser() {
         // given
-        val testUser = User("Saulo","Aguiar", Date(1989, 10, 26))
+        val testUser = User("Saulo","Aguiar", birthday = Date(1989, 10, 26))
         val createdUser = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1L, roles = emptySet())
 
         // when
@@ -72,26 +77,76 @@ class UserControllerTests {
                 .content(ObjectMapper().writeValueAsBytes(testUser)))
                 .andExpect(status().isOk)
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.firstName", `is`(createdUser.firstName)))
-                .andExpect(jsonPath("$.lastName", `is`(createdUser.lastName)))
-                .andExpect(jsonPath("$.id", `is`(1)))
+                .andExpect(jsonPath("$.user.firstName", `is`(createdUser.firstName)))
+                .andExpect(jsonPath("$.user.lastName", `is`(createdUser.lastName)))
+                .andExpect(jsonPath("$.user.id", `is`(1)))
     }
 
-//    @Test
-//    fun shouldRejectUserWithEmptyLastName() {
-//        // given
-//        val testUser = User("Saulo", "", Date(1989, 10, 26))
-//
-//        mockMvc.perform(post("/user/")
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .content(ObjectMapper().writeValueAsBytes(testUser)))
-//
-//                .andExpect(status().isOk)
+    @Test
+    fun shouldRejectUserWithEmptyLastName() {
+        // given
+        val testUser = User("Saulo", "", Date(1989, 10, 26))
+
+        // then
+        mockMvc.perform(post("/user/")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(ObjectMapper().writeValueAsBytes(testUser)))
+
+                .andExpect(status().is4xxClientError)
 //                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-//    }
+
+        // still unclear on what is returned when there's a validation error
+    }
+
+    @Test
+    fun shouldRejectUserWithEmptyFirstName() {
+        // given
+        val testUser = User("", "Owell", Date(1989, 10, 26))
+
+        // then
+        mockMvc.perform(post("/user/")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(ObjectMapper().writeValueAsBytes(testUser)))
+
+                .andExpect(status().is4xxClientError)
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+
+        // still unclear on what is returned when there's a validation error
+    }
+
+    @Test
+    fun shouldLoadPatientPrescriptions() {
+        // given
+        val presc1 = Prescription(
+                medicineName = "paracetamol",
+                medicineDose = 500,
+                medicineDoseUnit = "mg",
+                endDate = Date(2017, 10, 26).time,
+                startDate = Date(2017, 8, 26).time)
+        val presc2 = Prescription(
+                medicineName = "paracetamol",
+                medicineDose = 500,
+                medicineDoseUnit = "mg",
+                endDate = Date(2016, 10, 30).time,
+                startDate = Date(2016, 8, 26).time)
+
+        val user = User("First", "Last", Date(1990, 10, 1), listOf(presc1, presc2), id = 1L)
+
+        // when
+        Mockito.`when`(service.findOne(user.id)).thenReturn(user)
+
+        // then
+        mockMvc.perform(get("/user/${user.id}/prescriptions"))
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize<Any>(2)))
+                .andExpect(jsonPath("$[0].medicineName", equalTo(presc1.medicineName)))
+                .andExpect(jsonPath("$[1].medicineName", equalTo(presc2.medicineName)))
+
+    }
 
 	@Test
-    fun shouldLoadPatientsForACaregiver(){
+    fun shouldLoadPatientsForACaregiver() {
         val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
         val patient2 = User("Jonathan","Freeman", Date(1986, 10, 26), id = 2)
         val patient3 = User("Wonder","Woman", Date(1987, 10, 26), id = 3)
@@ -107,5 +162,40 @@ class UserControllerTests {
                 .andExpect(jsonPath("$[1].firstName", equalTo(patient2.firstName)))
                 .andExpect(jsonPath("$[2].firstName", equalTo(patient3.firstName)))
     }
+
+    @Test
+    fun shouldAssociatePrescriptionToPatient() {
+        // given
+        val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
+        val presc1 = Prescription(
+                medicineName = "paracetamol",
+                medicineDose = 500,
+                medicineDoseUnit = "mg",
+                endDate = Date(2017, 10, 26).time,
+                startDate = Date(2017, 8, 26).time)
+
+        val presc2 = presc1.copy(user = patient1)
+//        val presc2 = Prescription(
+//                medicineName = "paracetamol",
+//                medicineDose = 500,
+//                medicineDoseUnit = "mg",
+//                endDate = Date(2017, 10, 26).time,
+//                startDate = Date(2017, 8, 26).time,
+//                user = patient1)
+        // when
+        Mockito.`when`(service.findOne(patient1.id)).thenReturn(patient1)
+        Mockito.`when`(prescriptionService.save(presc2)).thenReturn(presc2)
+
+        // then
+        mockMvc.perform(post("/user/${patient1.id}/prescription")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(ObjectMapper().writeValueAsBytes(presc1)))
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.user.firstName", equalTo(patient1.firstName)))
+
+    }
+
+    // test when there's no user with that id
 
 }

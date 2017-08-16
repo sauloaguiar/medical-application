@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit4.SpringRunner
+import java.util.*
 
 /**
  * Created by sauloaguiar on 4/4/17.
@@ -36,12 +37,18 @@ class PrescriptionControllerTest {
 
     @Test
     fun shouldLoadPrescriptionById() {
-        var prescription = Prescription("Should take beer twice a week")
+        var prescription = Prescription(
+                medicineName = "paracetamol",
+                medicineDose = 500,
+                medicineDoseUnit = "mg",
+                endDate = Date(2017, 10, 26).time,
+                startDate = Date(2017, 8, 26).time)
+
         Mockito.`when`(service.findOne(1)).thenReturn(prescription)
         mockMvc.perform(MockMvcRequestBuilders.get("/prescription/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description", `is`(prescription.description)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.medicineName", `is`(prescription.medicineName)))
 
     }
 
