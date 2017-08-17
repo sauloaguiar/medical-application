@@ -37,5 +37,11 @@ class UserController(val userService: UserServiceContract, val prescriptionServi
         prescription.user = user
         return prescriptionService.save(prescription)
     }
+
+    @PostMapping("/{caregiverId}/patient")
+    fun associate(@PathVariable caregiverId: Long, @RequestBody payload: PatientDTO): TakesCareOf {
+//        val obj = Parser().parse(StringBuilder(payload.textValue())) as JsonObject
+        return userService.associate(payload.patient_id, caregiverId)
+    }
 }
 

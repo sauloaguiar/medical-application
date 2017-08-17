@@ -1,12 +1,14 @@
 package com.learning.medicare.user
 
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 /**
  * Created by sauloaguiar on 4/4/17.
  */
 @Service
-class UserService(val userRepository: UserRepository) : UserServiceContract {
+@Transactional
+open class UserService(val userRepository: UserRepository) : UserServiceContract {
 
     override fun getAllPatientsFor(caregiverId: Long): Sequence<User> {
 
@@ -31,6 +33,6 @@ interface UserServiceContract {
     fun findOne(id: Long): User
     fun save(user: User): User
 
-    fun associate(caregiverId: Long, patientId: Long): TakesCareOf
+    fun associate(patientId: Long, caregiverId: Long): TakesCareOf
     fun getAllPatientsFor(caregiverId: Long): Sequence<User>
 }

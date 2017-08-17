@@ -28,3 +28,5 @@ data class User(
                 inverseJoinColumns = arrayOf(JoinColumn(name = "role_id", referencedColumnName = "id")))
         val roles: Set<Role> = emptySet(),
         @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0)
+
+data class PatientDTO(val patient_id: Long = 0)

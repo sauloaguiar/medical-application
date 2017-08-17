@@ -3,7 +3,6 @@ package com.learning.medicare.user
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.learning.medicare.prescription.Prescription
 import com.learning.medicare.prescription.PrescriptionServiceContract
-import com.learning.medicare.prescription.Timetable
 import org.hamcrest.Matchers.*
 import org.hamcrest.core.Is.`is`
 import org.junit.Test
@@ -15,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
+
+import org.mockito.Mockito.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
@@ -164,4 +165,23 @@ class UserControllerTests {
                 .andExpect(jsonPath("$[2].firstName", equalTo(patient3.firstName)))
     }
 
+    @Test
+    fun shouldAssociatePatientToCaregiver() {
+        val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
+        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role("admin")), id = 4)
+
+        Mockito.`when`(userService.associate(patient1.id, caregiver.id)).thenReturn(TakesCareOf(patient1.id, caregiver.id, System.currentTimeMillis()))
+
+        mockMvc.perform(post("/user/${caregiver.id}/patient")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(ObjectMapper().writeValueAsBytes(PatientDTO(patient1.id))))
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.caregiverId", `is`(4)))
+                .andExpect(jsonPath("$.patientId", `is`(1)))
+                .andReturn()
+
+        verify(userService, times(1)).associate(patient1.id, caregiver.id)
+        verifyNoMoreInteractions(userService)
+    }
 }
