@@ -33,10 +33,6 @@ interface UserMatcher {
 
 class UserRepositoryImpl(@PersistenceContext val entityManager: EntityManager) : UserMatcher {
     override fun associate(patientId: Long, caregiverId: Long): TakesCareOf {
-        if (entityManager.find(User::class.java, patientId) == null ||
-                entityManager.find(User::class.java, caregiverId) == null) {
-            throw UserNotFoundException("No user found with provided Id")
-        }
         val take = TakesCareOf(patientId, caregiverId, System.currentTimeMillis())
         entityManager.persist(take)
         entityManager.flush()

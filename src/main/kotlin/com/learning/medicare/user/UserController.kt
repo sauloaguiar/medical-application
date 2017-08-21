@@ -2,6 +2,7 @@ package com.learning.medicare.user
 
 import com.learning.medicare.prescription.Prescription
 import com.learning.medicare.prescription.PrescriptionServiceContract
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -39,9 +40,17 @@ class UserController(val userService: UserServiceContract, val prescriptionServi
     }
 
     @PostMapping("/{caregiverId}/patient")
-    fun associate(@PathVariable caregiverId: Long, @RequestBody payload: PatientDTO): TakesCareOf {
-//        val obj = Parser().parse(StringBuilder(payload.textValue())) as JsonObject
-        return userService.associate(payload.patient_id, caregiverId)
+    fun associate(@PathVariable caregiverId: Long, @RequestBody payload: PatientDTO): ResponseEntity<TakesCareOf> {
+        try {
+            return ResponseEntity(userService.associate(payload.patient_id, caregiverId), HttpStatus.OK)
+        } catch (e: UserNotFoundException) {
+            return ResponseEntity(null, HttpStatus.NOT_FOUND)
+        } catch (e: InvalidAssociationException) {
+            return ResponseEntity(null, HttpStatus.BAD_REQUEST)
+        } catch (e: InvalidCaregiver) {
+            return ResponseEntity(null, HttpStatus.BAD_REQUEST)
+        }
+
     }
 }
 
