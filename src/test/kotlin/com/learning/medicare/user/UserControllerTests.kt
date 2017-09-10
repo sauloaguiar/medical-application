@@ -1,13 +1,14 @@
 package com.learning.medicare.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.learning.medicare.administration.Administration
+import com.learning.medicare.administration.AdministrationServiceContract
 import com.learning.medicare.prescription.Prescription
 import com.learning.medicare.prescription.PrescriptionServiceContract
+import com.learning.medicare.prescription.Timetable
 import org.hamcrest.Matchers.*
 import org.hamcrest.core.Is.`is`
-import org.junit.Rule
 import org.junit.Test
-import org.junit.internal.runners.statements.ExpectException
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,6 +35,9 @@ class UserControllerTests {
 
     @MockBean
     lateinit var prescriptionService: PrescriptionServiceContract
+
+    @MockBean
+    lateinit var administrationService: AdministrationServiceContract
 
     @Test
  	fun shouldLoadUserById() {
@@ -76,17 +80,14 @@ class UserControllerTests {
         Mockito.`when`(userService.save(testUser)).thenReturn(createdUser)
 
         // then
-        val r = mockMvc.perform(post("/user/")
+        mockMvc.perform(post("/user/")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(ObjectMapper().writeValueAsBytes(testUser)))
-//                .andExpect(status().isOk)
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-//                .andExpect(jsonPath("$.user.firstName", `is`(createdUser.firstName)))
-//                .andExpect(jsonPath("$.user.lastName", `is`(createdUser.lastName)))
-//                .andExpect(jsonPath("$.user.id", `is`(1)))
-                .andReturn()
-
-        print(r)
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.user.firstName", `is`(createdUser.firstName)))
+                .andExpect(jsonPath("$.user.lastName", `is`(createdUser.lastName)))
+                .andExpect(jsonPath("$.user.id", `is`(1)))
     }
 
     @Test
@@ -128,14 +129,14 @@ class UserControllerTests {
                 medicineName = "paracetamol",
                 medicineDose = 500,
                 medicineDoseUnit = "mg",
-                endDate = Date(2017, 10, 26).time,
-                startDate = Date(2017, 8, 26).time)
+                endDate = Date(2017, 10, 26),
+                startDate = Date(2017, 8, 26))
         val presc2 = Prescription(
                 medicineName = "paracetamol",
                 medicineDose = 500,
                 medicineDoseUnit = "mg",
-                endDate = Date(2016, 10, 30).time,
-                startDate = Date(2016, 8, 26).time)
+                endDate = Date(2016, 10, 30),
+                startDate = Date(2016, 8, 26))
 
         val user = User("First", "Last", Date(1990, 10, 1), listOf(presc1, presc2), id = 1L)
 
@@ -232,5 +233,47 @@ class UserControllerTests {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(ObjectMapper().writeValueAsBytes(PatientDTO(patient1.id))))
                 .andExpect(status().is4xxClientError)
+    }
+
+    @Test
+    fun shouldGet400ForNonExistingUser() {
+//        Mockito.`when`(administrationService.getAdministrationsForUser(1)).thenReturn(null)
+        Mockito.`when`(userService.findOne(1)).thenReturn(null)
+
+        mockMvc.perform(get("/user/1/administrations"))
+                .andExpect(status().is4xxClientError)
+
+        verify(userService, times(1)).findOne(1)
+        verifyNoMoreInteractions(userService)
+    }
+
+    @Test
+    fun shouldGetListWithAdministrations() {
+        val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
+        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.ADMIN)), id = 4)
+        val prescription = Prescription(
+                user = patient1,
+                timetable = Timetable("once in a week", "* * 7* * &"),
+                medicineName = "paracetamol",
+                medicineDoseUnit = "mg",
+                medicineDose = 20,
+                startDate = Date(2017, 10, 1),
+                endDate = Date(2017, 11, 1))
+        val adm = Administration(prescription = prescription, patientId = patient1.id, caregiverId = caregiver.id)
+
+        Mockito.`when`(userService.findOne(patient1.id)).thenReturn(patient1)
+        Mockito.`when`(administrationService.getAdministrationsForUser(patientId = patient1.id)).thenReturn(sequenceOf(adm))
+
+        mockMvc.perform(get("/user/${patient1.id}/administrations"))
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.[0].caregiverId", `is`(caregiver.id.toInt())))
+                .andExpect(jsonPath("$.[0].patientId", `is`(patient1.id.toInt())))
+                .andExpect(jsonPath("$.[0].prescription.medicineDose", `is`(prescription.medicineDose)))
+                .andExpect(jsonPath("$.[0].prescription.medicineDoseUnit", `is`(prescription.medicineDoseUnit)))
+                .andExpect(jsonPath("$.[0].prescription.medicineName", `is`(prescription.medicineName)))
+
+        verify(administrationService, times(1)).getAdministrationsForUser(1)
+        verifyNoMoreInteractions(administrationService)
     }
 }

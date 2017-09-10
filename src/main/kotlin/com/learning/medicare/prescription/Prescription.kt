@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.learning.medicare.user.User
+import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.validator.constraints.NotBlank
 import javax.persistence.*
+import java.util.*
 import javax.validation.constraints.NotNull
 
 /**
@@ -24,9 +26,10 @@ data class Prescription(
         @JoinColumn(name = "timetable_id", referencedColumnName = "id")
         @field:NotNull val timetable: Timetable? = null,
 
-        var assignedAt: Long = System.currentTimeMillis(),
-        var startDate: Long = 0,
-        var endDate: Long = 0,
+        @CreationTimestamp
+        var assignedAt: Date = Date(),
+        var startDate: Date = Date(),
+        var endDate: Date = Date(),
         @field:NotBlank var medicineName: String = "",
         var medicineDose: Int = 0,
         @field:NotBlank var medicineDoseUnit: String = "",

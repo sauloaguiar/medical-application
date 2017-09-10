@@ -1,5 +1,8 @@
 package com.learning.medicare.user
 
+import com.learning.medicare.administration.Administration
+import com.learning.medicare.prescription.Prescription
+import com.learning.medicare.prescription.Timetable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

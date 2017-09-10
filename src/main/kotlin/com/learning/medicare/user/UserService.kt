@@ -1,5 +1,6 @@
 package com.learning.medicare.user
 
+import com.learning.medicare.administration.Administration
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
