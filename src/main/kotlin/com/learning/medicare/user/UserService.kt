@@ -12,11 +12,6 @@ import javax.transaction.Transactional
 open class UserService(val userRepository: UserRepository) : UserServiceContract {
 
     override fun getAllPatientsFor(caregiverId: Long): Sequence<User> {
-
-//        return takesCareOfRepository.isResponsibleFor(findOne(caregiverId))
-//              extra fields for every call
-
-//        return userRepository.findOne(caregiverId).getAllPatients()
         return userRepository.getAllPatientsFor(caregiverId).asSequence()
     }
 

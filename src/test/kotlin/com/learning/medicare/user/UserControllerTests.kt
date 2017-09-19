@@ -237,7 +237,6 @@ class UserControllerTests {
 
     @Test
     fun shouldGet400ForNonExistingUser() {
-//        Mockito.`when`(administrationService.getAdministrationsForUser(1)).thenReturn(null)
         Mockito.`when`(userService.findOne(1)).thenReturn(null)
 
         mockMvc.perform(get("/user/1/administrations"))

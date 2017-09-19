@@ -36,7 +36,6 @@ class UserController(
 
     @GetMapping("/{caregiverId}/patients")
     fun getAllPatients(@PathVariable caregiverId: Long) = userService.getAllPatientsFor(caregiverId).toList()
-//        userService.findOne(caregiverId).getAllPatients()
 
     @PostMapping("/{patientId}/prescription")
     fun addPrescriptionToPatient(@PathVariable patientId: Long, @RequestBody prescription: Prescription): Prescription {
