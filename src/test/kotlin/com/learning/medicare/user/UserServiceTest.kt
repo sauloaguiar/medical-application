@@ -61,7 +61,7 @@ class UserServiceTest {
     @Test
     fun shouldAssociatePatientToCaregiver() {
         val patient = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
-        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.CAREGIVER)), id = 2)
+        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.CAREGIVER)), id = 2)
 
         Mockito.`when`(userRepository.findOne(patient.id)).thenReturn(patient)
         Mockito.`when`(userRepository.findOne(caregiver.id)).thenReturn(caregiver)
@@ -78,7 +78,7 @@ class UserServiceTest {
         val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
         val patient2 = User("Jonathan","Freeman", Date(1986, 10, 26), id = 2)
         val patient3 = User("Wonder","Woman", Date(1987, 10, 26), id = 3)
-        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.ADMIN)), id = 4)
+        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.ADMIN)), id = 4)
 
         Mockito.`when`(userRepository.findOne(1)).thenReturn(patient1)
         Mockito.`when`(userRepository.findOne(2)).thenReturn(patient2)

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "users")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id", scope = User::class)
 data class User(
         @field:NotBlank var firstName: String = "",
         @field:NotBlank var lastName: String = "",
@@ -26,7 +26,7 @@ data class User(
         @JoinTable(name = "user_role",
                 joinColumns = arrayOf(JoinColumn(name = "user_id", referencedColumnName = "id")),
                 inverseJoinColumns = arrayOf(JoinColumn(name = "role_id", referencedColumnName = "id")))
-        val roles: Set<Role> = emptySet(),
+        val roles: List<Role> = emptyList(),
         @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0)
 
 data class PatientDTO(val patient_id: Long = 0)

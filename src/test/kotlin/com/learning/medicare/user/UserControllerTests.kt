@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
+import org.junit.Assert.assertThat
 
 import org.mockito.Mockito.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
@@ -158,7 +159,7 @@ class UserControllerTests {
         val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
         val patient2 = User("Jonathan","Freeman", Date(1986, 10, 26), id = 2)
         val patient3 = User("Wonder","Woman", Date(1987, 10, 26), id = 3)
-        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.ADMIN)), id = 4)
+        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.ADMIN)), id = 4)
 
         Mockito.`when`(userService.getAllPatientsFor(caregiver.id)).thenReturn(listOf(patient1, patient2, patient3).asSequence())
 
@@ -174,7 +175,7 @@ class UserControllerTests {
     @Test
     fun shouldAssociatePatientToCaregiver() {
         val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
-        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.ADMIN)), id = 4)
+        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.ADMIN)), id = 4)
 
         Mockito.`when`(userService.associate(patient1.id, caregiver.id)).thenReturn(TakesCareOf(patient1.id, caregiver.id, System.currentTimeMillis()))
 
@@ -249,7 +250,7 @@ class UserControllerTests {
     @Test
     fun shouldGetListWithAdministrations() {
         val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
-        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.ADMIN)), id = 4)
+        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.ADMIN)), id = 4)
         val prescription = Prescription(
                 user = patient1,
                 timetable = Timetable("once in a week", "* * 7* * &"),
