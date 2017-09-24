@@ -1,5 +1,6 @@
 package com.learning.medicare.user
 
+import com.github.kittinunf.result.Result
 import com.learning.medicare.administration.Administration
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
@@ -9,26 +10,25 @@ import javax.transaction.Transactional
  */
 @Service
 @Transactional
-open class UserService(val userRepository: UserRepository) : UserServiceContract {
+open class UserService(private val userRepository: UserRepository) : UserServiceContract {
 
     override fun getAllPatientsFor(caregiverId: Long): Sequence<User> {
         return userRepository.getAllPatientsFor(caregiverId).asSequence()
     }
 
-    @Throws(UserNotFoundException::class, InvalidAssociationException::class, InvalidCaregiver::class)
-    override fun associate(patientId: Long, caregiverId: Long): TakesCareOf {
+    override fun associate(patientId: Long, caregiverId: Long): Result<TakesCareOf, Exception> {
         val patient = userRepository.findOne(patientId)
         val caregiver = userRepository.findOne(caregiverId)
         if (patient == null || caregiver == null) {
-            throw UserNotFoundException("No user found with provided Id")
+            return Result.of { throw UserNotFoundException("No user found with provided Id") }
         }
         if (patientId == caregiverId) {
-            throw InvalidAssociationException("Can't associate a patient to a caregiver with same id")
+            return Result.of { throw InvalidAssociationException("Can't associate a patient to a caregiver with same id") }
         }
         if (!caregiver.roles.contains(Role(RoleType.CAREGIVER))) {
-            throw InvalidCaregiver("Provided caregiver id doesn't have permissions")
+            return Result.of { throw InvalidCaregiver("Provided caregiver id doesn't have permissions") }
         }
-        return userRepository.associate(patientId, caregiverId)
+        return Result.of { userRepository.associate(patientId, caregiverId) }
     }
 
     override fun findAll(): Iterable<User> = userRepository.findAll()
@@ -41,7 +41,6 @@ interface UserServiceContract {
     fun findOne(id: Long): User
     fun save(user: User): User
 
-    @Throws(UserNotFoundException::class, InvalidAssociationException::class, InvalidCaregiver::class)
-    fun associate(patientId: Long, caregiverId: Long): TakesCareOf
+    fun associate(patientId: Long, caregiverId: Long): Result<TakesCareOf, Exception>
     fun getAllPatientsFor(caregiverId: Long): Sequence<User>
 }

@@ -26,7 +26,7 @@ open class UserRepositoryTest {
     @Before
     fun setUp() {
         patient = User("Saulo","Aguiar", Date(1989, 10, 26))
-        caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.ADMIN)))
+        caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.ADMIN)))
 
         entityManager.persist(patient)
         entityManager.persist(caregiver)

@@ -1,21 +1,19 @@
 package com.learning.medicare.user
 
 import com.fasterxml.jackson.annotation.*
-import org.hibernate.validator.constraints.NotBlank
 import javax.persistence.*
-import javax.validation.constraints.NotNull
 
 /**
  * Created by sauloaguiar on 5/4/17.
  */
 @Entity
 @Table(name = "roles")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id", scope = Role::class)
 class Role (
         var name: RoleType = RoleType.PATIENT,
         @JsonIgnore
         @ManyToMany(mappedBy = "roles", cascade = arrayOf(CascadeType.ALL))
-        val users: Set<User> = emptySet(),
+        val users: List<User> = emptyList(),
         @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) val id: Long = 0) {
 
         override fun equals(other: Any?): Boolean {

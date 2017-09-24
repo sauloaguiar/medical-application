@@ -32,7 +32,7 @@ open class AdministrationRepositoryTest {
     @Before
     fun setup() {
         patient = User("Saulo","Aguiar", Date(1989, 10, 26))
-        caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.ADMIN)))
+        caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.ADMIN)))
         prescription = Prescription(
                 user = patient,
                 timetable = Timetable("once in a week", "* * 7* * &"),

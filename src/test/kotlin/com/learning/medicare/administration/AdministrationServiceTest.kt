@@ -65,7 +65,7 @@ class AdministrationServiceTest {
     @Test
     fun shouldLoadAdministrationList() {
         val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
-        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = setOf(Role(RoleType.ADMIN)), id = 4)
+        val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.ADMIN)), id = 4)
         val prescription = Prescription(
                 user = patient1,
                 timetable = Timetable("once in a week", "* * 7* * &"),
