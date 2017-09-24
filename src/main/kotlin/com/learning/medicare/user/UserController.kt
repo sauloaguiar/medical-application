@@ -45,17 +45,8 @@ class UserController(
     }
 
     @PostMapping("/{caregiverId}/patient")
-    fun associate(@PathVariable caregiverId: Long, @RequestBody payload: PatientDTO): ResponseEntity<TakesCareOf> {
-        return try {
-            ResponseEntity(userService.associate(payload.patient_id, caregiverId), HttpStatus.OK)
-        } catch (e: UserNotFoundException) {
-            ResponseEntity(null, HttpStatus.NOT_FOUND)
-        } catch (e: InvalidAssociationException) {
-            ResponseEntity(null, HttpStatus.BAD_REQUEST)
-        } catch (e: InvalidCaregiver) {
-            ResponseEntity(null, HttpStatus.BAD_REQUEST)
-        }
-    }
+    fun associate(@PathVariable caregiverId: Long, @RequestBody payload: PatientDTO) = userService.associate(payload.patient_id, caregiverId)
+
 
     @GetMapping("/{patientId}/administrations")
     fun getAdministrationsFromPatient(@PathVariable patientId: Long): ResponseEntity<List<Administration>> {

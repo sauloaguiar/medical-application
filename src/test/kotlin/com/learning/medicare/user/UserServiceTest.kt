@@ -69,8 +69,8 @@ class UserServiceTest {
         Mockito.`when`(userRepository.associate(patient.id, caregiver.id)).thenReturn(TakesCareOf(patient.id, caregiver.id, System.currentTimeMillis()))
 
         val careOf = service.associate(patient.id, caregiver.id)
-        assertThat(careOf.caregiverId).isEqualTo(caregiver.id)
-        assertThat(careOf.patientId).isEqualTo(patient.id)
+        assertThat(careOf.get().caregiverId).isEqualTo(caregiver.id)
+        assertThat(careOf.get().patientId).isEqualTo(patient.id)
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.learning.medicare.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.kittinunf.result.Result
 import com.learning.medicare.administration.Administration
 import com.learning.medicare.administration.AdministrationServiceContract
 import com.learning.medicare.prescription.Prescription
@@ -177,7 +178,7 @@ class UserControllerTests {
         val patient1 = User("Saulo","Aguiar", Date(1989, 10, 26), id = 1)
         val caregiver = User("Nataly","Results", Date(1987, 2,25), roles = listOf(Role(RoleType.ADMIN)), id = 4)
 
-        Mockito.`when`(userService.associate(patient1.id, caregiver.id)).thenReturn(TakesCareOf(patient1.id, caregiver.id, System.currentTimeMillis()))
+        Mockito.`when`(userService.associate(patient1.id, caregiver.id)).thenReturn(Result.of(TakesCareOf(patient1.id, caregiver.id, System.currentTimeMillis())))
 
         mockMvc.perform(post("/user/${caregiver.id}/patient")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

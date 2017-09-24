@@ -22,7 +22,7 @@ interface UserMatcher {
     fun associate(patientId: Long, caregiverId: Long): TakesCareOf
 }
 
-class UserRepositoryImpl(@PersistenceContext val entityManager: EntityManager) : UserMatcher {
+class UserRepositoryImpl(@PersistenceContext private val entityManager: EntityManager) : UserMatcher {
     override fun associate(patientId: Long, caregiverId: Long): TakesCareOf {
         val take = TakesCareOf(patientId, caregiverId, System.currentTimeMillis())
         entityManager.persist(take)
