@@ -41,8 +41,8 @@ class PrescriptionControllerTest {
                 medicineName = "paracetamol",
                 medicineDose = 500,
                 medicineDoseUnit = "mg",
-                endDate = Date(2017, 10, 26).time,
-                startDate = Date(2017, 8, 26).time)
+                endDate = Date(2017, 10, 26),
+                startDate = Date(2017, 8, 26))
 
         Mockito.`when`(service.findOne(1)).thenReturn(prescription)
         mockMvc.perform(MockMvcRequestBuilders.get("/prescription/1"))

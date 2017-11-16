@@ -14,6 +14,7 @@ class AdministrationService (val repository: AdministrationRepository) : Adminis
     override fun findAll(): Iterable<Administration> = repository.findAll()
     override fun save(administration: Administration): Administration = repository.save(administration)
     override fun findOne(id: Long): Administration = repository.findOne(id)
+    override fun getAdministrationsForUser(patientId: Long) = repository.findAdministrationByPatientId(patientId).asSequence()
 }
 
 interface AdministrationServiceContract {
@@ -21,5 +22,5 @@ interface AdministrationServiceContract {
     fun findAll(): Iterable<Administration>
     fun save(administration: Administration): Administration
     fun findInRange(start: Long, end: Long): Iterable<Administration>
-//    fun findBy
+    fun getAdministrationsForUser(patientId: Long): Sequence<Administration>
 }

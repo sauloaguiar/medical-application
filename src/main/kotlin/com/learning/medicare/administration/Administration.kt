@@ -1,7 +1,9 @@
 package com.learning.medicare.administration
 
 import com.learning.medicare.prescription.Prescription
+import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.validator.constraints.NotBlank
+import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -12,8 +14,9 @@ import javax.validation.constraints.NotNull
 @Table(name = "Administrations")
 class Administration (
         @ManyToOne(cascade = arrayOf(CascadeType.ALL))
-        @field:NotNull var medicine: Prescription? = null,
-        @field:NotBlank var timestamp: Long = 0,
-        @field:NotBlank var patient_id: Long = 0,
-        @field:NotBlank var caregiver_id: Long = 0,
+        @field:NotNull var prescription: Prescription? = null,
+        @CreationTimestamp
+        var timestamp: Date = Date(),
+        var patientId: Long = 0,
+        var caregiverId: Long = 0,
         @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long = 0)

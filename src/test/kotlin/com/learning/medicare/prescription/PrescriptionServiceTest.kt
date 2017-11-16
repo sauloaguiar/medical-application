@@ -33,8 +33,8 @@ class PrescriptionServiceTest {
                 medicineName = "paracetamol",
                 medicineDose = 500,
                 medicineDoseUnit = "mg",
-                endDate = Date(2017, 10, 26).time,
-                startDate = Date(2017, 8, 26).time)
+                endDate = Date(2017, 10, 26),
+                startDate = Date(2017, 8, 26))
         Mockito.`when`(repository.findOne(1)).thenReturn(presc)
 
         assertThat(service.findOne(1)).isEqualTo(presc)
@@ -47,14 +47,14 @@ class PrescriptionServiceTest {
                 medicineName = "paracetamol",
                 medicineDose = 500,
                 medicineDoseUnit = "mg",
-                endDate = Date(2017, 10, 26).time,
-                startDate = Date(2017, 8, 26).time)
+                endDate = Date(2017, 10, 26),
+                startDate = Date(2017, 8, 26))
         var presc2 = Prescription(
                 medicineName = "Ibuprofen",
                 medicineDose = 200,
                 medicineDoseUnit = "mg",
-                endDate = Date(2017, 10, 26).time,
-                startDate = Date(2017, 8, 26).time)
+                endDate = Date(2017, 10, 26),
+                startDate = Date(2017, 8, 26))
 
         Mockito.`when`(repository.findAll()).thenReturn(listOf(presc1, presc2))
         assertThat(service.findAll()).hasSize(2)
@@ -67,8 +67,8 @@ class PrescriptionServiceTest {
                 medicineName = "Ibuprofen",
                 medicineDose = 200,
                 medicineDoseUnit = "mg",
-                endDate = Date(2017, 10, 26).time,
-                startDate = Date(2017, 8, 26).time)
+                endDate = Date(2017, 10, 26),
+                startDate = Date(2017, 8, 26))
         Mockito.`when`(repository.save(presc1)).thenReturn(presc1)
         service.save(presc1)
         Mockito.verify(repository).save(presc1)
